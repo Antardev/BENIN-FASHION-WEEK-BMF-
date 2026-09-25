@@ -11,6 +11,11 @@ class Event extends Model
 
     protected $casts = ['starts_at' => 'datetime', 'is_active' => 'boolean', 'images' => 'array'];
 
+    public function getDateLabelAttribute(): ?string
+    {
+        return $this->starts_at?->translatedFormat('j F Y');
+    }
+
     public function ticketTypes(): HasMany
     {
         return $this->hasMany(TicketType::class)->orderBy('price');

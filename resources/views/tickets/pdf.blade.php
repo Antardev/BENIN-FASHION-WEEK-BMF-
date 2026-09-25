@@ -61,7 +61,7 @@
 
         <table class="details">
             <tr><td class="label">Événement</td><td>{{ $type->event->title }}
-                @if($type->event->starts_at) · {{ $type->event->starts_at->translatedFormat('j F Y, H\hi') }} @endif
+                @if($type->event->starts_at) · {{ $type->event->date_label }} @endif
                 @if($type->event->venue) · {{ $type->event->venue }} @endif</td></tr>
             <tr><td class="label">Type de billet</td><td>{{ $type->name }} · {{ $type->price_label }}</td></tr>
             <tr><td class="label">Titulaire</td><td>{{ $order->buyer_name }} · {{ $order->buyer_email }}</td></tr>

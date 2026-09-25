@@ -21,7 +21,7 @@ return new class extends Migration
             ],
             [
                 'slug' => 'fashion-brunch',
-                'images' => [],
+                'images' => ['Fashionbrunch.jpeg'],
                 'title' => 'Fashion Brunch',
                 'tagline' => 'Un brunch entre créateurs, invités et passionnés.',
                 'description' => 'Un moment convivial pour échanger avec les créateurs autour d\'un brunch.',

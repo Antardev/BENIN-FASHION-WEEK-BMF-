@@ -14,7 +14,7 @@
             <p><strong>{{ $order->ticketType->event->title }}</strong><br>
                 {{ $order->ticketType->name }} · {{ $order->quantity }} place(s)<br>
                 {{ $order->ticketType->event->starts_at
-                    ? $order->ticketType->event->starts_at->translatedFormat('j F Y, H\hi')
+                    ? $order->ticketType->event->date_label
                     : 'Date à confirmer' }}
             </p>
 
@@ -67,3 +67,4 @@
     </div>
 </body>
 </html>
+

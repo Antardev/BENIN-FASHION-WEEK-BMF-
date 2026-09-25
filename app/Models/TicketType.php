@@ -35,6 +35,14 @@ class TicketType extends Model
         return max(0, $this->capacity - $this->sold());
     }
 
+    /** Les billets du Concours Jeunes Talents sont annoncés mais pas encore ouverts à la réservation. */
+    public function isComingSoon(): bool
+    {
+        $this->loadMissing('event');
+
+        return $this->event?->slug === 'concours-jeunes-talents' || $this->is_available === false;
+    }
+
     public function getPriceLabelAttribute(): string
     {
         return number_format($this->price, 0, ',', ' ').' FCFA';
@@ -52,6 +60,7 @@ class TicketType extends Model
             ['defile-haute-couture-distinctions', 'VIP'] => 'Tickets BFW HC-25K.jpg.jpeg',
             ['defile-haute-couture-distinctions', 'Standard'] => 'Tickets BFW HC-15K.jpg.jpeg',
             ['fashion-brunch', 'Place brunch'] => 'Ticket Brunch 15K.jpg.jpeg',
+            ['fashion-brunch', 'Reservation de stand'] => 'Ticket Brunch Stand 50K.jpg.jpeg',
             default => null,
         };
 

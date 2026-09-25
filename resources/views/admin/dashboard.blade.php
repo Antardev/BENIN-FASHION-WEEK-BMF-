@@ -11,7 +11,7 @@
         <div>
             <p class="admin-eyebrow mb-2">Administration · BFW 2026</p>
             <h1 class="mb-2">Piloter la billetterie</h1>
-            <p class="mb-0">Suivez les ventes et les entrées validées du 21 au 24 octobre 2026.</p>
+            <p class="mb-0">Suivez les ventes et les entrées validées pour les événements des 23 et 24 octobre 2026.</p>
         </div>
         <a class="btn btn-gold" href="{{ route('admin.scan') }}">Contrôler les entrées <span aria-hidden="true">→</span></a>
     </div>

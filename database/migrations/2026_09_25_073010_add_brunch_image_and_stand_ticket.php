@@ -18,7 +18,7 @@ return new class extends Migration
         DB::table('events')
             ->where('id', $eventId)
             ->update([
-                'images' => json_encode(['BFW Brunch Stand.jpg.jpeg']),
+                'images' => json_encode(['Fashionbrunch.jpeg']),
                 'updated_at' => now(),
             ]);
 

@@ -15,11 +15,21 @@ class OrderController extends Controller
     {
         $ticketType->load('event');
 
+        if ($ticketType->isComingSoon()) {
+            return redirect()->route('home')->with('ticket_coming_soon', 'Ce billet sera bientôt disponible à la réservation.');
+        }
+
         return view('checkout', compact('ticketType'));
     }
 
     public function store(Request $request, TicketType $ticketType, PaymentGateway $gateway)
     {
+        $ticketType->loadMissing('event');
+
+        if ($ticketType->isComingSoon()) {
+            return redirect()->route('home')->with('ticket_coming_soon', 'Ce billet sera bientôt disponible à la réservation.');
+        }
+
         $data = $request->validate([
             'buyer_name' => 'required|string|max:120',
             'buyer_email' => 'required|email|max:160',
