@@ -25,6 +25,7 @@
         ],
         'fashion-brunch' => [
             ['name' => 'Place brunch', 'description' => 'Une place à table', 'price' => 15000],
+            ['name' => 'Reservation de stand', 'description' => 'Stand 3m x 3m table + 2 chaises', 'price' => 50000],
         ],
         'concours-jeunes-talents' => [
             ['name' => 'Standard', 'description' => 'Accès à la salle', 'price' => 5000],
@@ -35,9 +36,10 @@
 @endphp
 <section class="event py-5 border-top" id="{{ $event->slug }}">
     <div class="container">
-    <div class="event-index">0{{ $loop->iteration }}</div>
         <div class="row g-4 g-lg-5 align-items-center">
             <div class="col-lg-6 {{ $loop->even ? 'order-lg-2' : '' }}">
+                <div class="event-media">
+                    <div class="event-index" aria-hidden="true">0{{ $loop->iteration }}</div>
                 @if(count($imgs) >= 2)
                     <div class="row g-3">
                         <div class="col-7"><img class="event-img tall" src="{{ asset('images/'.$imgs[0]) }}" alt="{{ $event->title }}" loading="lazy"></div>
@@ -48,6 +50,7 @@
                 @else
                     <div class="event-ph" aria-hidden="true"><div class="strokes"><i></i><i></i><i></i></div></div>
                 @endif
+                </div>
             </div>
 
             <div class="col-lg-6">

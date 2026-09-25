@@ -39,4 +39,24 @@ class TicketType extends Model
     {
         return number_format($this->price, 0, ',', ' ').' FCFA';
     }
+
+    /**
+     * Chemin absolu du visuel du billet (public/images/Tickets), ou null.
+     * Source unique utilisée par l'email ET le PDF (la colonne « image » n'existe pas en base).
+     */
+    public function ticketImagePath(): ?string
+    {
+        $this->loadMissing('event');
+
+        $image = match ([$this->event->slug, $this->name]) {
+            ['defile-haute-couture-distinctions', 'VIP'] => 'Tickets BFW HC-25K.jpg.jpeg',
+            ['defile-haute-couture-distinctions', 'Standard'] => 'Tickets BFW HC-15K.jpg.jpeg',
+            ['fashion-brunch', 'Place brunch'] => 'Ticket Brunch 15K.jpg.jpeg',
+            default => null,
+        };
+
+        $path = $image ? public_path('images/Tickets/'.$image) : null;
+
+        return $path && is_file($path) ? $path : null;
+    }
 }

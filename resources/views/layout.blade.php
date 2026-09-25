@@ -18,7 +18,7 @@
             <img src="{{ asset('images/logo.png') }}" alt="">
             Benin Fashion Week
         </a>
-        <div class="d-flex align-items-center gap-2">
+        <div class="navbar-actions d-flex align-items-center gap-2">
             <a class="btn btn-outline-light btn-sm" href="{{ route('home') }}#programme">Programme</a>
             @auth
                 <form method="post" action="{{ route('admin.logout') }}" class="d-inline">

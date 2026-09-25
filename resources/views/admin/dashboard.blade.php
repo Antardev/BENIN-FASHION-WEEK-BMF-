@@ -69,5 +69,45 @@
             </div>
         </section>
     @endforeach
+
+    <section class="admin-event-panel">
+        <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-3">
+            <div>
+                <p class="admin-eyebrow mb-1">Suivi des commandes</p>
+                <h2 class="h3 mb-1">Tous les achats de tickets</h2>
+                <span class="text-body-secondary small">{{ $orders->count() }} commande(s) enregistrée(s)</span>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Commande</th>
+                        <th>Date</th>
+                        <th>Acheteur</th>
+                        <th>Événement / catégorie</th>
+                        <th class="text-end">Qté</th>
+                        <th class="text-end">Total</th>
+                        <th>Statut</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @forelse($orders as $order)
+                    <tr>
+                        <td><strong>{{ $order->reference }}</strong><br><span class="small text-body-secondary">{{ $order->buyer_phone }}</span></td>
+                        <td>{{ $order->created_at->format('d/m/Y à H:i') }}</td>
+                        <td>{{ $order->buyer_name }}<br><span class="small text-body-secondary">{{ $order->buyer_email }}</span></td>
+                        <td>{{ $order->ticketType->event->title }}<br><span class="small text-body-secondary">{{ $order->ticketType->name }}</span></td>
+                        <td class="text-end">{{ $order->quantity }}</td>
+                        <td class="text-end">{{ number_format($order->total, 0, ',', ' ') }} FCFA</td>
+                        <td>{{ ucfirst($order->status) }}</td>
+                    </tr>
+                @empty
+                    <tr><td colspan="7" class="text-body-secondary">Aucun achat enregistré.</td></tr>
+                @endforelse
+                </tbody>
+            </table>
+        </div>
+    </section>
 </main>
 @endsection
