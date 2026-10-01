@@ -17,7 +17,7 @@ return new class extends Migration
         $eventId = DB::table('events')->where('slug', 'concours-jeunes-talents')->value('id');
 
         if ($eventId) {
-            DB::table('ticket_types')->where('event_id', $eventId)->update(['is_available' => false, 'updated_at' => now()]);
+            DB::table('ticket_types')->where('event_id', $eventId)->update(['is_available' => true, 'updated_at' => now()]);
         }
     }
 

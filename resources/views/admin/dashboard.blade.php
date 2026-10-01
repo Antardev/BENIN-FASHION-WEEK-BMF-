@@ -45,27 +45,34 @@
                 <div class="progress-bar" style="width: {{ $eventRate }}%"></div>
             </div>
             <div class="table-responsive">
-        <table class="table align-middle">
-            <thead><tr><th>Catégorie</th><th class="text-end">Vendus</th><th class="text-end">Capacité</th><th class="text-end">Recettes</th></tr></thead>
-            <tbody>
-            @foreach($event->ticketTypes as $t)
-                @php $qty = $t->orders->sum('quantity'); @endphp
-                <tr>
-                    <td>{{ $t->name }}</td>
-                    <td class="text-end">{{ $qty }}</td>
-                    <td class="text-end">
-                        <form method="post" action="{{ route('admin.capacity.update', $t) }}" class="admin-capacity-form">
-                            @csrf
-                            <label class="visually-hidden" for="capacity-{{ $t->id }}">Capacité de {{ $t->name }}</label>
-                            <input id="capacity-{{ $t->id }}" type="number" name="capacity" min="{{ $qty }}" max="100000" value="{{ $t->capacity }}" required>
-                            <button type="submit" class="btn btn-sm btn-outline-dark" title="Enregistrer la capacité de {{ $t->name }}">Enregistrer</button>
-                        </form>
-                    </td>
-                    <td class="text-end">{{ number_format($qty * $t->price, 0, ',', ' ') }} FCFA</td>
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Catégorie</th>
+                            <th class="text-end">Vendus</th>
+                            <th class="text-end">Capacité</th>
+                            <th class="text-end">Recettes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($event->ticketTypes as $t)
+                        @php $qty = $t->orders->sum('quantity'); @endphp
+                        <tr>
+                            <td>{{ $t->name }}</td>
+                            <td class="text-end">{{ $qty }}</td>
+                            <td class="text-end">
+                                <form method="post" action="{{ route('admin.capacity.update', $t) }}" class="admin-capacity-form">
+                                    @csrf
+                                    <label class="visually-hidden" for="capacity-{{ $t->id }}">Capacité de {{ $t->name }}</label>
+                                    <input id="capacity-{{ $t->id }}" type="number" name="capacity" min="{{ $qty }}" max="100000" value="{{ $t->capacity }}" required>
+                                    <button type="submit" class="btn btn-sm btn-outline-dark" title="Enregistrer la capacité de {{ $t->name }}">Enregistrer</button>
+                                </form>
+                            </td>
+                            <td class="text-end">{{ number_format($qty * $t->price, 0, ',', ' ') }} FCFA</td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
             </div>
         </section>
     @endforeach
@@ -75,9 +82,12 @@
             <div>
                 <p class="admin-eyebrow mb-1">Suivi des commandes</p>
                 <h2 class="h3 mb-1">Tous les achats de tickets</h2>
-                <span class="text-body-secondary small">{{ $orders->count() }} commande(s) enregistrée(s)</span>
+                <span class="text-body-secondary small">
+                    {{ $orders->total() }} commande{{ $orders->total() !== 1 ? 's' : '' }} enregistrée{{ $orders->total() !== 1 ? 's' : '' }}
+                </span>
             </div>
         </div>
+
         <div class="table-responsive">
             <table class="table align-middle">
                 <thead>
@@ -94,10 +104,19 @@
                 <tbody>
                 @forelse($orders as $order)
                     <tr>
-                        <td><strong>{{ $order->reference }}</strong><br><span class="small text-body-secondary">{{ $order->buyer_phone }}</span></td>
+                        <td>
+                            <strong>{{ $order->reference }}</strong><br>
+                            <span class="small text-body-secondary">{{ $order->buyer_phone }}</span>
+                        </td>
                         <td>{{ $order->created_at->format('d/m/Y à H:i') }}</td>
-                        <td>{{ $order->buyer_name }}<br><span class="small text-body-secondary">{{ $order->buyer_email }}</span></td>
-                        <td>{{ $order->ticketType->event->title }}<br><span class="small text-body-secondary">{{ $order->ticketType->name }}</span></td>
+                        <td>
+                            {{ $order->buyer_name }}<br>
+                            <span class="small text-body-secondary">{{ $order->buyer_email }}</span>
+                        </td>
+                        <td>
+                            {{ $order->ticketType->event->title }}<br>
+                            <span class="small text-body-secondary">{{ $order->ticketType->name }}</span>
+                        </td>
                         <td class="text-end">{{ $order->quantity }}</td>
                         <td class="text-end">{{ number_format($order->total, 0, ',', ' ') }} FCFA</td>
                         <td>{{ ucfirst($order->status) }}</td>
@@ -108,6 +127,17 @@
                 </tbody>
             </table>
         </div>
+
+        {{-- ═══════════ Pagination ═══════════ --}}
+        @if($orders->total() > 0)
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mt-3">
+                <span class="text-body-secondary small">
+                    Affichage {{ $orders->firstItem() }}–{{ $orders->lastItem() }}
+                    sur {{ $orders->total() }} commande{{ $orders->total() !== 1 ? 's' : '' }}
+                </span>
+                {{ $orders->links('pagination::bootstrap-5') }}
+            </div>
+        @endif
     </section>
 </main>
 @endsection

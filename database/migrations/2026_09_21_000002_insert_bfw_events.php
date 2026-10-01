@@ -10,7 +10,7 @@ return new class extends Migration
         $events = [
             [
                 'slug' => 'defile-haute-couture-distinctions',
-                'images' => ['defile.jpg'],
+                'images' => ['defile.jpeg'],
                 'title' => 'Défilé Haute Couture & Distinctions',
                 'tagline' => 'La soirée phare de la semaine.',
                 'description' => 'Les créateurs présentent leurs collections haute couture, suivies de la remise des distinctions.',
@@ -36,8 +36,8 @@ return new class extends Migration
                 'tagline' => 'La nouvelle génération de créateurs béninois.',
                 'description' => 'De jeunes stylistes présentent leurs créations devant un jury et le public.',
                 'tickets' => [
-                    ['Standard', 'Accès à la salle', 5000, 400],
-                    ['VIP', 'Accès privilégié et placement réservé', 10000, 100],
+                    ['Standard', 'Concours stylisme modelisme', 5000, 400],
+
                 ],
             ],
         ];

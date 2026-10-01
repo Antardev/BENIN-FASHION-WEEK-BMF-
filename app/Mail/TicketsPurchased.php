@@ -17,9 +17,16 @@ class TicketsPurchased extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public int $tries = 3;
+    public int $timeout = 120;
+
+
+
+
     public function __construct(public Order $order)
     {
         $this->order->loadMissing('tickets', 'ticketType.event');
+        $this->onQueue('emails'); // optionnel : queue dédiée
     }
 
     public function envelope(): Envelope

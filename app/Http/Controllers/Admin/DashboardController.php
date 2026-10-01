@@ -12,10 +12,18 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function index()
+   public function index()
     {
-        $events = Event::with(['ticketTypes.orders' => fn ($q) => $q->where('status', 'paid')])->orderBy('position')->get();
-        $orders = Order::with('ticketType.event')->latest()->get();
+        $events = Event::with(['ticketTypes.orders' => fn ($q) => $q->where('status', 'paid')])
+            ->orderBy('position')
+            ->get();
+
+        // ⬇️ PAGINATION des commandes (15 par page)
+        $orders = Order::with('ticketType.event')
+            ->latest()
+            ->paginate(15)
+            ->withQueryString();
+
         $checkedIn = Ticket::whereNotNull('checked_in_at')->count();
 
         return view('admin.dashboard', compact('events', 'orders', 'checkedIn'));

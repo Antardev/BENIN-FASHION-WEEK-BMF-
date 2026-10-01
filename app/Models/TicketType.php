@@ -10,6 +10,8 @@ class TicketType extends Model
 {
     protected $guarded = [];
 
+    protected $casts = ['is_available' => 'boolean'];
+
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
@@ -35,12 +37,10 @@ class TicketType extends Model
         return max(0, $this->capacity - $this->sold());
     }
 
-    /** Les billets du Concours Jeunes Talents sont annoncés mais pas encore ouverts à la réservation. */
+    /** Un billet n'est « à venir » que si is_available vaut explicitement false en base. */
     public function isComingSoon(): bool
     {
-        $this->loadMissing('event');
-
-        return $this->event?->slug === 'concours-jeunes-talents' || $this->is_available === false;
+        return $this->is_available === false;
     }
 
     public function getPriceLabelAttribute(): string
@@ -57,10 +57,11 @@ class TicketType extends Model
         $this->loadMissing('event');
 
         $image = match ([$this->event->slug, $this->name]) {
-            ['defile-haute-couture-distinctions', 'VIP'] => 'Tickets BFW HC-25K.jpg.jpeg',
-            ['defile-haute-couture-distinctions', 'Standard'] => 'Tickets BFW HC-15K.jpg.jpeg',
-            ['fashion-brunch', 'Place brunch'] => 'Ticket Brunch 15K.jpg.jpeg',
-            ['fashion-brunch', 'Reservation de stand'] => 'Ticket Brunch Stand 50K.jpg.jpeg',
+            ['defile-haute-couture-distinctions', 'VIP'] => 'defile-vip.jpeg',
+            ['defile-haute-couture-distinctions', 'Standard'] => 'defile-standard.jpeg',
+            ['fashion-brunch', 'Place brunch'] => 'brunch-place.jpeg',
+            ['fashion-brunch', 'Reservation de stand'] => 'brunch-stand.png',
+            ['concours-jeunes-talents', 'Standard'] => 'CJT.jpeg',
             default => null,
         };
 

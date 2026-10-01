@@ -15,7 +15,7 @@ use BaconQrCode\Writer;
  * (c'est elle qui faisait planter le PDF : "You need to install the imagick extension").
  *
  *  - svg()  : aucune extension requise → utilisé dans le PDF (dompdf) et sur la page web.
- *  - png()  : via GD (extension quasi toujours active) → utilisé dans l'email,
+ *  - png()  : encodeur PHP pur (aucune extension) → utilisé dans l'email,
  *             car Gmail / Outlook n'affichent pas les images SVG.
  */
 class TicketQrCode
@@ -57,38 +57,37 @@ class TicketQrCode
         return 'data:image/svg+xml;base64,'.base64_encode($this->svg($ticket, $size));
     }
 
-    /** PNG binaire, ou null si ni GD ni imagick ne sont disponibles. */
-    public function png(Ticket $ticket, int $size = 300): ?string
+    /**
+     * QR code en PNG pour l'email (Gmail / Outlook n'affichent pas le SVG).
+     * Encodeur PNG écrit en PHP pur : ne dépend NI de GD NI d'imagick,
+     * le QR s'affiche donc dans la boîte mail quelle que soit la config de PHP.
+     */
+    public function png(Ticket $ticket, int $size = 300): string
     {
-        if (! function_exists('imagecreatetruecolor')) {
-            return null;
-        }
-
         $matrix = Encoder::encode($this->payload($ticket), ErrorCorrectionLevel::M(), 'UTF-8')->getMatrix();
         $modules = $matrix->getWidth();
-        $quiet = 2;
+        $quiet = 4; // marge blanche réglementaire (4 modules) pour une lecture fiable
         $scale = max(1, intdiv($size, $modules + 2 * $quiet));
         $pixels = ($modules + 2 * $quiet) * $scale;
 
-        $image = imagecreatetruecolor($pixels, $pixels);
-        $white = imagecolorallocate($image, 255, 255, 255);
-        $black = imagecolorallocate($image, 0, 0, 0);
-        imagefill($image, 0, 0, $white);
-
-        for ($y = 0; $y < $modules; $y++) {
-            for ($x = 0; $x < $modules; $x++) {
-                if ($matrix->get($x, $y) === 1) {
-                    $px = ($x + $quiet) * $scale;
-                    $py = ($y + $quiet) * $scale;
-                    imagefilledrectangle($image, $px, $py, $px + $scale - 1, $py + $scale - 1, $black);
-                }
+        $raw = '';
+        for ($y = 0; $y < $pixels; $y++) {
+            $my = intdiv($y, $scale) - $quiet;
+            $line = "\x00"; // filtre PNG « None »
+            for ($x = 0; $x < $pixels; $x++) {
+                $mx = intdiv($x, $scale) - $quiet;
+                $dark = $mx >= 0 && $my >= 0 && $mx < $modules && $my < $modules && $matrix->get($mx, $my) === 1;
+                $line .= $dark ? "\x00" : "\xFF";
             }
+            $raw .= $line;
         }
 
-        ob_start();
-        imagepng($image);
-        imagedestroy($image);
+        $chunk = fn (string $type, string $data) => pack('N', strlen($data)).$type.$data
+            .pack('N', crc32($type.$data));
 
-        return ob_get_clean();
+        return "\x89PNG\r\n\x1a\n"
+            .$chunk('IHDR', pack('NNCCCCC', $pixels, $pixels, 8, 0, 0, 0, 0)) // 8 bits, niveaux de gris
+            .$chunk('IDAT', gzcompress($raw, 9))
+            .$chunk('IEND', '');
     }
 }
