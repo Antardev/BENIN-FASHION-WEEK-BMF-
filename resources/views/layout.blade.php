@@ -38,5 +38,7 @@
     <div class="container">Benin Fashion Week · Questions : <a href="mailto:{{ config('bfw.contact_email') }}">{{ config('bfw.contact_email') }}</a></div>
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.kkiapay.me/k.js"></script>
+@stack('scripts')
 </body>
 </html>

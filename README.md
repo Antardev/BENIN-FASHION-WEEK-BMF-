@@ -18,7 +18,7 @@ php artisan serve
 ```
 
 - Site public : `/`
-- Administration : `/admin` (connexion HTTP : admin@beninfashionweek.com / changez-moi)
+- Administration : `/admin` (identifiants à définir dans les variables `ADMIN_EMAIL` et `ADMIN_PASSWORD` de l'environnement)
 - Contrôle d'entrée : `/admin/scan`
 
 ## Images
@@ -31,6 +31,9 @@ Bootstrap est chargé par CDN : aucune étape `npm` nécessaire.
 - `database/seeders/DatabaseSeeder.php` : prix, capacités, dates (`starts_at`), lieux (`venue`) — valeurs provisoires.
 - Mot de passe admin (changez-le immédiatement).
 - Paiement : `App\Services\PaymentGateway` — mode `BFW_PAYMENT=simulation` par défaut.
-  Pour la production, brancher FedaPay ou Kkiapay (MTN / Moov Mobile Money) et appeler
-  `$order->markPaid($transactionId)` depuis le webhook de confirmation.
-- Envoi du billet par e-mail : ajouter une `Mailable` appelée depuis `Order::markPaid()`.
+  Pour KkiaPay, définissez `BFW_PAYMENT=kkiapay` et renseignez `KKIAPAY_PUBLIC_KEY`,
+  `KKIAPAY_PRIVATE_KEY` et `KKIAPAY_SECRET` dans l'environnement. Gardez les deux dernières
+  clés côté serveur uniquement. Utilisez
+  `KKIAPAY_SANDBOX=true` pour les tests. La commande n'est confirmée et les billets ne sont
+  émis qu'après vérification serveur du statut, du montant et de la référence de commande.
+- Envoi du billet par e-mail : `TicketsPurchased`, envoyé après confirmation du paiement.

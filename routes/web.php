@@ -15,6 +15,9 @@ Route::post('/reserver/{ticketType}', [OrderController::class, 'store'])->name('
 
 Route::get('/paiement/{order:reference}', [PaymentController::class, 'show'])->name('payment.show');
 Route::post('/paiement/{order:reference}/simuler', [PaymentController::class, 'simulate'])->name('payment.simulate');
+Route::post('/paiement/{order:reference}/kkiapay/verifier', [PaymentController::class, 'verifyKkiapay'])
+    ->middleware('throttle:10,1')
+    ->name('payment.kkiapay.verify');
 Route::get('/paiement/{order:reference}/confirmation', [PaymentController::class, 'confirmation'])->name('payment.confirmation');
 
 Route::get('/connexion-admin', [AuthController::class, 'create'])->name('login');
