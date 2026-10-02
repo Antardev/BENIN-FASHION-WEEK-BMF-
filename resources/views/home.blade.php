@@ -46,8 +46,8 @@
             'title'       => 'Concours Jeunes Talents',
             'tagline'     => 'La nouvelle génération de créateurs béninois.',
             'description' => 'De jeunes stylistes présentent leurs créations devant un jury et le public.',
-            'date'        => 'Date à confirmer',
-            'venue'       => 'Lieu à confirmer',
+            'date'        => '22 octobre 2026',
+            'venue'       => 'BENIN ROYAL HOTEL',
             'images'      => ['talents.jpeg'],
             'tickets'     => [
                 'Standard' => ['description' => 'Accès à la salle', 'price' => 5000],

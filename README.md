@@ -29,7 +29,8 @@ Bootstrap est chargé par CDN : aucune étape `npm` nécessaire.
 
 ## À personnaliser
 - `database/seeders/DatabaseSeeder.php` : prix, capacités, dates (`starts_at`), lieux (`venue`) — valeurs provisoires.
-- Mot de passe admin (changez-le immédiatement).
+- Mot de passe admin (changez-le immédiatement). bloquage explicite si l’app tourne en production sans ADMIN_EMAIL / ADMIN_PASSWORD
+interdiction des identifiants admin par défaut (“admin@beninfashionweek.com” / “changez-moi”) en production
 - Paiement : `App\Services\PaymentGateway` — mode `BFW_PAYMENT=simulation` par défaut.
   Pour KkiaPay, définissez `BFW_PAYMENT=kkiapay` et renseignez `KKIAPAY_PUBLIC_KEY`,
   `KKIAPAY_PRIVATE_KEY` et `KKIAPAY_SECRET` dans l'environnement. Gardez les deux dernières
@@ -37,3 +38,5 @@ Bootstrap est chargé par CDN : aucune étape `npm` nécessaire.
   `KKIAPAY_SANDBOX=true` pour les tests. La commande n'est confirmée et les billets ne sont
   émis qu'après vérification serveur du statut, du montant et de la référence de commande.
 - Envoi du billet par e-mail : `TicketsPurchased`, envoyé après confirmation du paiement.
+
+configurer aussi le smtp

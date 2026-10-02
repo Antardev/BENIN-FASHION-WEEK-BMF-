@@ -22,12 +22,20 @@ return new class extends Migration
                 'venue' => 'AMBA YARD FERME (TORI)',
                 'updated_at' => now(),
             ]);
+
+        DB::table('events')
+            ->where('slug', 'concours-jeunes-talents')
+            ->update([
+                'starts_at' => '2026-10-22 00:00:00',
+                'venue' => 'BENIN ROYAL HOTEL',
+                'updated_at' => now(),
+            ]);
     }
 
     public function down(): void
     {
         DB::table('events')
-            ->whereIn('slug', ['defile-haute-couture-distinctions', 'fashion-brunch'])
+            ->whereIn('slug', ['defile-haute-couture-distinctions', 'fashion-brunch', 'concours-jeunes-talents'])
             ->update([
                 'starts_at' => null,
                 'venue' => null,
