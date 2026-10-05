@@ -14,7 +14,7 @@
             <h1 class="h2 mb-3">{{ $ticketType->event->title }}</h1>
             <div class="summary mb-4">
                 <strong>{{ $ticketType->name }}</strong> · {{ $ticketType->price_label }} par place
-                <div class="small text-body-secondary">{{ $ticketType->remaining() }} places restantes</div>
+                {{-- <div class="small text-body-secondary">{{ $ticketType->remaining() }} places restantes</div> --}}
             </div>
 
             <form method="post" action="{{ route('order.store', $ticketType) }}" novalidate>

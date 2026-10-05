@@ -18,6 +18,18 @@
 --}}
 @php
     $programme = [
+        'concours-jeunes-talents' => [
+            'title'       => 'Concours Jeunes Talents',
+            'tagline'     => 'La nouvelle génération de créateurs béninois.',
+            'description' => 'De jeunes stylistes présentent leurs créations devant un jury et le public.',
+            'date'        => '22 octobre 2026',
+            'venue'       => 'BENIN ROYAL HOTEL',
+            'images'      => ['talents.jpeg'],
+            'tickets'     => [
+                'Standard' => ['description' => 'Accès à la salle', 'price' => 5000],
+                'VIP'      => ['description' => 'Accès privilégié et placement réservé', 'price' => 10000],
+            ],
+        ],
         'defile-haute-couture-distinctions' => [
             'title'       => 'Défilé Haute Couture & Distinctions',
             'tagline'     => 'La soirée phare de la semaine.',
@@ -40,18 +52,6 @@
             'tickets'     => [
                 'Place brunch'          => ['description' => 'Une place à table', 'price' => 15000],
                 'Reservation de stand'  => ['description' => 'Stand 3m x 3m table + 2 chaises', 'price' => 50000],
-            ],
-        ],
-        'concours-jeunes-talents' => [
-            'title'       => 'Concours Jeunes Talents',
-            'tagline'     => 'La nouvelle génération de créateurs béninois.',
-            'description' => 'De jeunes stylistes présentent leurs créations devant un jury et le public.',
-            'date'        => '22 octobre 2026',
-            'venue'       => 'BENIN ROYAL HOTEL',
-            'images'      => ['talents.jpeg'],
-            'tickets'     => [
-                'Standard' => ['description' => 'Accès à la salle', 'price' => 5000],
-                // 'VIP'      => ['description' => 'Accès privilégié et placement réservé', 'price' => 10000],
             ],
         ],
     ];
@@ -176,14 +176,9 @@
     @if($left === 0)
         <span class="badge badge-sold">Complet</span>
     @else
-        <span class="small {{ $left <= 20 ? '' : 'text-body-secondary' }}">
-            @if($left <= 20)
-                <span class="badge badge-low">Plus que {{ $left }} places</span>
-            @else
-                {{ $left }} places disponibles
-            @endif
-            <span class="capacity-note">sur {{ $type->capacity }}</span>
-        </span>
+        @if($left <= 20)
+            <span class="badge badge-low">Places limitées</span>
+        @endif
         <a class="btn btn-gold btn-sm" href="{{ route('checkout', $type) }}">Réserver</a>
     @endif
 </div>

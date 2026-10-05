@@ -61,6 +61,7 @@ class TicketType extends Model
             ['defile-haute-couture-distinctions', 'Standard'] => 'defile-standard.jpeg',
             ['fashion-brunch', 'Place brunch'] => 'brunch-place.jpeg',
             ['fashion-brunch', 'Reservation de stand'] => 'brunch-stand.png',
+            ['concours-jeunes-talents', 'VIP'] => 'CJT10K.jpeg',
             ['concours-jeunes-talents', 'Standard'] => 'CJT.jpeg',
             default => null,
         };
