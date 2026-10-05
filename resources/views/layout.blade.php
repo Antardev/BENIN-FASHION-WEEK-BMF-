@@ -20,14 +20,14 @@
         </a>
         <div class="navbar-actions d-flex align-items-center gap-2">
             <a class="btn btn-outline-light btn-sm" href="{{ route('home') }}#programme">Programme</a>
-            @auth
+            {{-- @auth
                 <form method="post" action="{{ route('admin.logout') }}" class="d-inline">
                     @csrf
                     <button class="btn btn-dark btn-sm" type="submit">Déconnexion</button>
                 </form>
             @else
                 <a class="btn btn-dark btn-sm" href="{{ route('login') }}">Espace admin</a>
-            @endauth
+            @endauth --}}
         </div>
     </div>
 </nav>
