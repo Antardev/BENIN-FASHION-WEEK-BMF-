@@ -19,11 +19,12 @@
 @php
     $programme = [
         'concours-jeunes-talents' => [
-            'title'       => 'Concours Jeunes Talents',
-            'tagline'     => 'La nouvelle génération de créateurs béninois.',
-            'description' => 'De jeunes stylistes présentent leurs créations devant un jury et le public.',
-            'date'        => '22 octobre 2026',
-            'venue'       => 'BENIN ROYAL HOTEL',
+            'title'       => 'CONCOURS JEUNES TALENTS',
+            'tagline'     => 'Finale Stylisme-Modelisme',
+            'description' => 'Ils sont 08 finalistes, prêts à révéler leur créativité à travers leurs mini-collections autour du thème « La femme africaine : entre tradition et modernité ».',
+            'date'        => 'Jeudi 22 octobre 2026 à partir de 18h',
+            'venue'       => 'Bénin Royal Hôtel',
+            'closing'     => 'Venez nombreux encourager la relève parce que les talents de demain méritent d’être célébrés aujourd’hui !',
             'images'      => ['talents.jpeg'],
             'tickets'     => [
                 'Standard' => ['description' => 'Accès à la salle', 'price' => 5000],
@@ -31,11 +32,12 @@
             ],
         ],
         'defile-haute-couture-distinctions' => [
-            'title'       => 'Défilé Haute Couture & Distinctions',
-            'tagline'     => 'La soirée phare de la semaine.',
-            'description' => 'Les créateurs présentent leurs collections haute couture, suivies de la remise des distinctions.',
-            'date'        => '23 octobre 2026',
-            'venue'       => "FRANCOISE'S GARDEN COTONOU",
+            'title'       => 'SOIRÉE HAUTE COUTURE',
+            'tagline'     => 'Défilé de mode international',
+            'description' => 'Venez vivre la grande soirée mode la plus attendue de l’année, le vendredi 23 octobre 2026 à partir de 19h, à Françoise’s Garden – Cotonou.',
+            'date'        => 'Vendredi 23 octobre 2026 · À partir de 19h',
+            'venue'       => 'Françoise’s Garden – Cotonou',
+            'highlight'   => 'De grands créateurs venus de 10 pays, des collections d’exception portées par des mannequins professionnels et des invités de marque vous y attendent pour une soirée mémorable.',
             'images'      => ['defile.jpeg'],
             'tickets'     => [
                 'Standard' => ['description' => 'Placement en tribune', 'price' => 15000],
@@ -152,6 +154,14 @@
                         {{ $eventInfo['date'] }}<br>
                         {{ $eventInfo['venue'] }}
                     </p>
+
+                    @if(! empty($eventInfo['closing']))
+                        <p class="text-body-secondary">{{ $eventInfo['closing'] }}</p>
+                    @endif
+
+                    @if(! empty($eventInfo['highlight']))
+                        <p class="border-start border-3 border-warning ps-3 text-body-secondary">{{ $eventInfo['highlight'] }}</p>
+                    @endif
 
                     <ul class="list-group list-group-flush ticket-list border-top">
                         @foreach($event->ticketTypes as $type)
