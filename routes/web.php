@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PasswordResetController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
@@ -22,6 +23,15 @@ Route::get('/paiement/{order:reference}/confirmation', [PaymentController::class
 
 Route::get('/connexion-admin', [AuthController::class, 'create'])->name('login');
 Route::post('/connexion-admin', [AuthController::class, 'store'])->middleware('throttle:login')->name('admin.login.store');
+Route::get('/mot-de-passe-oublie', [PasswordResetController::class, 'createLink'])->name('password.request');
+Route::post('/mot-de-passe-oublie', [PasswordResetController::class, 'sendLink'])
+    ->middleware('throttle:6,1')
+    ->name('password.email');
+Route::get('/reinitialiser-mot-de-passe/{token}', [PasswordResetController::class, 'showResetForm'])
+    ->name('password.reset');
+Route::post('/reinitialiser-mot-de-passe', [PasswordResetController::class, 'reset'])
+    ->middleware('throttle:6,1')
+    ->name('password.update');
 
 Route::get('/billets/{order:reference}', [TicketController::class, 'show'])->name('tickets.show');
 Route::get('/billets/{order:reference}/pdf', [TicketController::class, 'downloadOrder'])

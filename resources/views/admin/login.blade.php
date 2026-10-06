@@ -10,6 +10,10 @@
         <h1 id="login-title">Bienvenue en coulisses.</h1>
         <p class="text-body-secondary mb-4">Connectez-vous pour piloter les ventes et contrôler les entrées.</p>
 
+        @if(session('status'))
+            <div class="alert alert-success" role="status">{{ session('status') }}</div>
+        @endif
+
         <form method="post" action="{{ route('admin.login.store') }}">
             @csrf
             <div class="form-floating mb-3">
@@ -21,6 +25,9 @@
                 <input id="password" type="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Mot de passe" autocomplete="current-password" required>
                 <label for="password">Mot de passe</label>
                 @error('password')<div class="invalid-feedback">{{ $message }}</div>@enderror
+            </div>
+            <div class="text-end mb-4">
+                <a class="small text-body-secondary" href="{{ route('password.request') }}">Mot de passe oublié ?</a>
             </div>
             <div class="form-check mb-4">
                 <input id="remember" type="checkbox" name="remember" value="1" class="form-check-input">
