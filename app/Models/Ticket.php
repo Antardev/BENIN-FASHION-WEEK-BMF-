@@ -15,4 +15,10 @@ class Ticket extends Model
     {
         return $this->belongsTo(Order::class);
     }
+
+    /** Administrateur qui a validé l'entrée. */
+    public function checkedInBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'checked_in_by');
+    }
 }

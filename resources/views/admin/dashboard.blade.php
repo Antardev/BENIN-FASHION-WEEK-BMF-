@@ -23,7 +23,7 @@
     <div class="row g-3 mb-5">
         <div class="col-md-4"><div class="admin-stat admin-stat-red"><div class="stat-icon">↗</div><div class="text-body-secondary small">Billets vendus</div><div class="stat-value">{{ number_format($sold, 0, ',', ' ') }}</div><div class="small text-body-secondary">Toutes catégories confondues</div></div></div>
         <div class="col-md-4"><div class="admin-stat admin-stat-gold"><div class="stat-icon">₣</div><div class="text-body-secondary small">Recettes</div><div class="stat-value">{{ number_format($revenue, 0, ',', ' ') }} <small>FCFA</small></div><div class="small text-body-secondary">Ventes confirmées</div></div></div>
-        <div class="col-md-4"><div class="admin-stat admin-stat-green"><div class="stat-icon">✓</div><div class="text-body-secondary small">Entrées validées</div><div class="stat-value">{{ number_format($checkedIn, 0, ',', ' ') }}</div><div class="small text-body-secondary">Billets contrôlés à l’accueil</div></div></div>
+        <div class="col-md-4"><div class="admin-stat admin-stat-green"><div class="stat-icon">✓</div><div class="text-body-secondary small">Entrées validées</div><div class="stat-value">{{ number_format($checkedIn, 0, ',', ' ') }}</div><div class="small text-body-secondary">sur {{ number_format($paidTickets, 0, ',', ' ') }} billet{{ $paidTickets > 1 ? 's' : '' }} payé{{ $paidTickets > 1 ? 's' : '' }} · contrôlés à l’accueil</div></div></div>
     </div>
 
     @foreach($events as $event)
@@ -76,6 +76,69 @@
             </div>
         </section>
     @endforeach
+
+    <section class="admin-event-panel mb-4" id="billets-scannes">
+        <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-3">
+            <div>
+                <p class="admin-eyebrow mb-1">Contrôle des entrées</p>
+                <h2 class="h3 mb-1">Billets déjà scannés</h2>
+                <span class="text-body-secondary small">
+                    {{ $scannedTickets->total() }} billet{{ $scannedTickets->total() > 1 ? 's' : '' }} validé{{ $scannedTickets->total() > 1 ? 's' : '' }} à l’entrée, du plus récent au plus ancien
+                </span>
+            </div>
+            <a class="btn btn-sm btn-outline-dark" href="{{ route('admin.scan') }}">Scanner des billets</a>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Billet</th>
+                        <th>Scanné le</th>
+                        <th>Acheteur</th>
+                        <th>Événement / catégorie</th>
+                        <th>Commande</th>
+                        <th>Scanné par</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @forelse($scannedTickets as $ticket)
+                    <tr>
+                        <td><strong>{{ $ticket->code }}</strong></td>
+                        <td class="scan-time">
+                            {{ $ticket->checked_in_at->format('d/m/Y à H:i:s') }}<br>
+                            <span class="small text-body-secondary">{{ $ticket->checked_in_at->diffForHumans() }}</span>
+                        </td>
+                        <td>
+                            {{ $ticket->order->buyer_name }}<br>
+                            <span class="small text-body-secondary">{{ $ticket->order->buyer_phone }}</span>
+                        </td>
+                        <td>
+                            {{ $ticket->order->ticketType->event->title }}<br>
+                            <span class="small text-body-secondary">{{ $ticket->order->ticketType->name }}</span>
+                        </td>
+                        <td>{{ $ticket->order->reference }}</td>
+                        <td>
+                            {{ $ticket->checkedInBy?->name ?? '—' }}
+                            @if($ticket->check_in_ip)<br><span class="small text-body-secondary">IP {{ $ticket->check_in_ip }}</span>@endif
+                        </td>
+                    </tr>
+                @empty
+                    <tr><td colspan="6" class="text-body-secondary">Aucun billet scanné pour le moment.</td></tr>
+                @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        @if($scannedTickets->hasPages())
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mt-3">
+                <span class="text-body-secondary small">
+                    Affichage {{ $scannedTickets->firstItem() }}–{{ $scannedTickets->lastItem() }} sur {{ $scannedTickets->total() }}
+                </span>
+                {{ $scannedTickets->fragment('billets-scannes')->links('pagination::bootstrap-5') }}
+            </div>
+        @endif
+    </section>
 
     <section class="admin-event-panel">
         <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-3">

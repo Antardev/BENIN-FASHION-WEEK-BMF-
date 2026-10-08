@@ -43,6 +43,6 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/scan', [DashboardController::class, 'scan'])->name('admin.scan');
     Route::post('/capacites/{ticketType}', [DashboardController::class, 'updateCapacity'])->name('admin.capacity.update');
-    Route::post('/scan', [DashboardController::class, 'check'])->name('admin.check');
+    Route::post('/scan', [DashboardController::class, 'check'])->middleware('throttle:120,1')->name('admin.check');
     Route::post('/deconnexion', [AuthController::class, 'destroy'])->name('admin.logout');
 });
